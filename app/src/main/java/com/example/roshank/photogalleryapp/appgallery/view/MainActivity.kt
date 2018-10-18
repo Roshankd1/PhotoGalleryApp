@@ -1,7 +1,8 @@
-package com.example.roshank.photogalleryapp
+package com.example.roshank.photogalleryapp.appgallery.view
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import com.example.roshank.photogalleryapp.R
 
 class MainActivity : AppCompatActivity() {
 
