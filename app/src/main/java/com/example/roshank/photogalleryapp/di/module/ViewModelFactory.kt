@@ -5,8 +5,8 @@ import android.arch.lifecycle.ViewModelProvider
 import javax.inject.Inject
 import javax.inject.Provider
 import javax.inject.Singleton
-import kotlin.reflect.KClass
 
+@Suppress("UNCHECKED_CAST")
 @Singleton
 class ViewModelFactory : ViewModelProvider.Factory {
 
@@ -18,8 +18,23 @@ class ViewModelFactory : ViewModelProvider.Factory {
     }
 
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        val creator: Provider<ViewModel>? = creators!!.get(modelClass)
-
+        var creator: Provider<ViewModel>? = creators!![modelClass]
+        if(creator!=null){
+            for ((key, value) in creators!!) {
+                if (modelClass.isAssignableFrom(key)) {
+                    creator = value
+                    break
+                }
+            }
+        }
+        if(creator==null){
+        throw IllegalArgumentException("Unknown model class$modelClass")
+        }
+        try {
+            return creator.get() as T
+        } catch (e: Exception) {
+            throw RuntimeException(e)
+        }
     }
 
 }
